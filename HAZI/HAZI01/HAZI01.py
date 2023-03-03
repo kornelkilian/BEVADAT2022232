@@ -101,7 +101,9 @@ def transpose(input_list):
 #input parameters: input_list,chunk_size
 
 # %%
-
+def split_into_chunks(input_list,chunk_size):
+    x = [input_list[i:i + chunk_size] for i in range(0, len(input_list), chunk_size)]
+    return x
 
 # %%
 #Create a function that can merge n dictionaries
@@ -124,7 +126,14 @@ def merge_dicts(*dict):
 #input parameters: input_list
 
 # %%
-
+def by_parity(input_list):
+    mydict={"odd":[],"even":[]}
+    for i in range(len(input_list)):
+        if input_list[i]%2==1:
+            mydict["odd"].append(input_list[i])
+        else:
+            mydict["even"].append(input_list[i])
+    return mydict
 
 # %%
 #Create a function that receives a dictionary like this: {"some_key":[1,2,3,4],"another_key":[1,2,3,4],....}
@@ -135,7 +144,9 @@ def merge_dicts(*dict):
 #input parameters: input_dict
 
 # %%
-
+def mean_key_value(input_dict):
+    res = {key: sum(val) / len(val) for key, val, in input_dict.items()}
+    return res
 
 # %%
 #If all the functions are created convert this notebook into a .py file and push to your repo
