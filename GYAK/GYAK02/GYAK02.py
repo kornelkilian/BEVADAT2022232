@@ -25,8 +25,9 @@ def create_array(size=(2,2)):
 #set_one()
 
 # %%
-def set_one(array):
-   return np.fill_diagonal(array,1)
+def set_one(array:np.array):
+    np.fill_diagonal(array,1)
+    return array
 
 # %%
 # Transzponáld a paraméterül kapott mártix-ot:
@@ -57,7 +58,7 @@ def round_array(m,n=2):
 
 # %%
 def bool_array(array:np.array):
-    return array.astype(np.bool_)
+    return array==1
 
 
 # %%
