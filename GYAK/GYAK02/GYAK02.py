@@ -68,8 +68,8 @@ def bool_array(array:np.array):
 # invert_bool_array()
 
 # %%
-def bool_array(array:np.array):
-    return  array==0
+def invert_bool_array(array:np.array):
+    return array==0
 
 
 # %%
