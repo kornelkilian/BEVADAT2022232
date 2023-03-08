@@ -57,8 +57,8 @@ def round_array(m,n=2):
 # bool_array()
 
 # %%
-def bool_array(array:np.array):
-    return array==1
+def bool_array(array)->np.ndarray:
+    return np.array(array,dtype=bool)
 
 
 # %%
