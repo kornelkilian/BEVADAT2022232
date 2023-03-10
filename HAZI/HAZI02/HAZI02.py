@@ -45,7 +45,8 @@ def get_array_shape(array:np.array):
 # encode_Y()
 
 # %%
-
+def encode_Y(input_array, num_classes):
+    return np.eye(num_classes)[input_array]
 
 # %%
 # A fenti feladatnak valósítsd meg a kiértékelését. Adj meg a 2d array-t és adj vissza a decodolt változatát
@@ -54,7 +55,8 @@ def get_array_shape(array:np.array):
 # decode_Y()
 
 # %%
-
+def decode_Y(input):
+    return np.argmax(input, axis=1)
 
 # %%
 # Készíts egy olyan függvényt, ami képes kiértékelni egy neurális háló eredményét! Bemenetként egy listát és egy array-t és adja vissza a legvalószínübb element a listából.
@@ -63,7 +65,8 @@ def get_array_shape(array:np.array):
 # eval_classification()
 
 # %%
-
+def eval_classification(array1,array2):
+    return array2[np.argmax(array1)]
 
 # %%
 # Készíts egy olyan függvényt, ahol az 1D array-ben a páratlan számokat -1-re cseréli
@@ -108,6 +111,11 @@ def array_multi(array:np.array):
 
 # %%
 
+def array_multi_2d(array):
+    # Az összes sor szorzatát kiszámítjuk
+    final = np.prod(array, axis=1)
+    return final.tolist()
+
 
 # %%
 # Készíts egy olyan függvényt, amit egy meglévő numpy array-hez készít egy bordert nullásokkal. Bementként egy array-t várjon és kimenetként egy array jelenjen meg aminek van border-je
@@ -118,6 +126,9 @@ def array_multi(array:np.array):
 
 # %%
 
+def add_border(array):
+    return np.pad(array, pad_width=1, mode='constant')
+
 
 # %%
 # Készíts egy olyan függvényt ami két dátum között felsorolja az összes napot.
@@ -126,6 +137,9 @@ def array_multi(array:np.array):
 # list_days()
 
 # %%
+
+def list_days(start_date, end_date):
+    return np.arange(np.datetime64(start_date), np.datetime64(end_date) + np.timedelta64(1, 'D'), dtype='datetime64').tolist()
 
 
 # %%
@@ -147,10 +161,9 @@ def asd():
 
 
 # %%
+
 def sec_from_1970():
-    dt = np.datetime64('1970-1-1') - np.datetime64('today','D')
-    seconds= dt / np.timedelta64(1, 's')
-    return seconds
+    return int(np.floor_divide(np.datetime64('now', 's'), np.timedelta64(1, 's')))
 
 
 
