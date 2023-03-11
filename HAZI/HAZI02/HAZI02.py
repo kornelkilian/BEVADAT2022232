@@ -152,11 +152,11 @@ def list_days(start_date:np.datetime64, end_date:np.datetime64):
 # Ki: 2017-03-24 
 
 # %%
-def today():
+def get_act_day():
     today = np.datetime64('today', 'D')
     return today
 
-print(today())
+
 
 
 # %%
