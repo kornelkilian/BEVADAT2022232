@@ -8,8 +8,10 @@ import numpy as np
 # column_swap()
 
 # %%
-def column_swap(array:np.array):
-    return np.flip(array)
+
+
+def reverse_columns(arr):
+    return np.column_swap(arr, 0, 1)
 
 
 # %%
@@ -31,11 +33,11 @@ def compare_two_array(array1:np.array,array2:np.array):
 # 3D-vel még műküdnie kell!
 
 # %%
-def get_array_shape(array:np.array):
-    a=array.shape
-    a=a+(0,0,0)
-    
-    return "sor: {}, oszlop: {}, melyseg: {}".format(a[0],a[1],a[2]) 
+
+def get_array_shape(arr:np.array):
+    shape = np.array(arr).shape
+    return f"sor: {shape[0]}, oszlop: {shape[1]}, melyseg: {shape[2] if len(shape) > 2 else 1}"
+
 
 # %%
 # Készíts egy olyan függvényt, aminek segítségével elő tudod állítani egy neurális hálózat tanításához szükséges Y-okat egy numpy array-ből. 
@@ -66,7 +68,7 @@ def decode_Y(input):
 
 # %%
 def eval_classification(array1,array2):
-    return array2[np.argmax(array1)]
+    return array1[np.argmax(array2)]
 
 # %%
 # Készíts egy olyan függvényt, ahol az 1D array-ben a páratlan számokat -1-re cseréli
@@ -100,8 +102,10 @@ def replace_by_value(array:np.array,num):
 # Ha több dimenziós a tömb, akkor az egész tömb elemeinek szorzatával térjen vissza
 
 # %%
-def array_multi(array:np.array):
-    return np.multiply(array)
+
+def array_multi(arr):
+    return np.prod(arr)
+
 
 # %%
 # Készítsd egy olyan függvényt, ami a 2D array értékeit összeszorozza és egy olyan array-el tér vissza, aminek az elemei a soroknak a szorzata
@@ -112,7 +116,7 @@ def array_multi(array:np.array):
 # %%
 
 def array_multi_2d(array):
-    # Az összes sor szorzatát kiszámítjuk
+    
     final = np.prod(array, axis=1)
     return final.tolist()
 
@@ -138,8 +142,11 @@ def add_border(array):
 
 # %%
 
+
 def list_days(start_date, end_date):
-    return np.arange(np.datetime64(start_date), np.datetime64(end_date) + np.timedelta64(1, 'D'), dtype='datetime64').tolist()
+    start = np.datetime64(start_date)
+    end = np.datetime64(end_date) + np.timedelta64(1, 'D')
+    return [str(date) for date in np.arange(start, end, dtype='datetime64[D]')]
 
 
 # %%
@@ -148,9 +155,9 @@ def list_days(start_date, end_date):
 # Ki: 2017-03-24 
 
 # %%
-def asd():
+def today():
     today = np.datetime64('today', 'D')
-    
+    return today
 
 
 # %%
