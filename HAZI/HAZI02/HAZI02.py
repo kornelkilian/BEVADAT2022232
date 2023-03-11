@@ -152,9 +152,10 @@ def list_days(start_date:np.datetime64, end_date:np.datetime64):
 # Ki: 2017-03-24 
 
 # %%
-def get_act_day():
-    today = np.datetime64('today', 'D')
-    return today
+
+
+def get_act_date():
+    return f"{np.datetime64('today', 'D')}\n"
 
 
 
@@ -168,10 +169,8 @@ def get_act_day():
 
 # %%
 
-
 def sec_from_1970():
-    return int((np.datetime64('now') - np.datetime64(0, 's')) / np.timedelta64(1, 's'))
-
+    return int((np.datetime64('now') - np.datetime64('1970-01-01T00:00:00Z')) / np.timedelta64(1, 's'))
 
 
 
