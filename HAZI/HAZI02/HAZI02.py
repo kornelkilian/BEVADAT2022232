@@ -9,9 +9,8 @@ import numpy as np
 
 # %%
 
-
-def reverse_columns(arr):
-    return np.column_swap(arr, 0, 1)
+def column_swap(arr):
+    return np.flip(arr, axis=1).tolist()
 
 
 # %%
@@ -36,7 +35,8 @@ def compare_two_array(array1:np.array,array2:np.array):
 
 def get_array_shape(arr:np.array):
     shape = np.array(arr).shape
-    return f"sor: {shape[0]}, oszlop: {shape[1]}, melyseg: {shape[2] if len(shape) > 2 else 1}"
+    return f"sor: {shape[0]}, oszlop: {shape[1]}, melyseg: {shape[2] if len(shape) > 2 else 0}"
+
 
 
 # %%
@@ -142,11 +142,8 @@ def add_border(array):
 
 # %%
 
-
-def list_days(start_date, end_date):
-    start = np.datetime64(start_date)
-    end = np.datetime64(end_date) + np.timedelta64(1, 'D')
-    return [str(date) for date in np.arange(start, end, dtype='datetime64[D]')]
+def list_days(start_date:np.datetime64, end_date:np.datetime64):
+    return np.arange(np.datetime64(start_date), np.datetime64(end_date)+np.timedelta64(1,'D'), dtype='datetime64[D]').astype(str).tolist()
 
 
 # %%
@@ -155,9 +152,11 @@ def list_days(start_date, end_date):
 # Ki: 2017-03-24 
 
 # %%
-def get_act_date()->np.datetime64:
+def today():
     today = np.datetime64('today', 'D')
     return today
+
+print(today())
 
 
 # %%
@@ -169,8 +168,9 @@ def get_act_date()->np.datetime64:
 
 # %%
 
+
 def sec_from_1970():
-    return int(np.floor_divide(np.datetime64('now', 's'), np.timedelta64(1, 's')))
+    return int((np.datetime64('now') - np.datetime64(0, 's')) / np.timedelta64(1, 's'))
 
 
 
