@@ -33,11 +33,8 @@ def compare_two_array(array1:np.array,array2:np.array):
 
 # %%
 
-def get_array_shape(arr:np.array):
-    shape = np.array(arr).shape
-    return f"sor: {shape[0]}, oszlop: {shape[1]}, melyseg: {shape[2] if len(shape) > 2 else 0}"
-
-
+def get_array_shape(arr: np.array) -> str:
+    return 'sor: {0}, oszlop: {1}, melyseg: {2}'.format(*arr.shape + (0,0,0))
 
 # %%
 # Készíts egy olyan függvényt, aminek segítségével elő tudod állítani egy neurális hálózat tanításához szükséges Y-okat egy numpy array-ből. 
@@ -142,9 +139,8 @@ def add_border(array):
 
 # %%
 
-def list_days(start_date:np.datetime64, end_date:np.datetime64):
-    return np.arange(np.datetime64(start_date), np.datetime64(end_date)+np.timedelta64(1,'D'), dtype='datetime64[D]').astype(str).tolist()
-
+def list_days(start: str, end: str) -> np.array:
+    return np.arange(np.datetime64(start), np.datetime64(end), np.timedelta64(1, 'D'))
 
 # %%
 # Írj egy fügvényt ami vissza adja az aktuális dátumot az alábbi formában: YYYY-MM-DD
@@ -154,9 +150,8 @@ def list_days(start_date:np.datetime64, end_date:np.datetime64):
 # %%
 
 
-def get_act_date():
-    return f"{np.datetime64('today', 'D')}\n"
-
+def get_act_date() -> np.datetime64:
+    return np.datetime64('today')
 
 
 
