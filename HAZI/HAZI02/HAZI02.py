@@ -1,171 +1,275 @@
 # %%
+import pandas as pd
+import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 # %%
-# Írj egy olyan fügvényt, ami megfordítja egy 2d array oszlopait
-# Be: [[1,2],[3,4]]
-# Ki: [[2,1],[4,3]]
-# column_swap()
-
-# %%
-
-def column_swap(arr):
-    return np.flip(arr, axis=1).tolist()
-
-
-# %%
-#Készíts egy olyan függvényt ami összehasonlít két array-t és adjon vissza egy array-ben, hogy hol egyenlőek 
-# Pl Be: [7,8,9], [9,8,7] 
-# Ki: [1]
-# compare_two_array()
-# egyenlő elemszámúakra kell csak hogy működjön
-
-# %%
-def compare_two_array(array1:np.array,array2:np.array):
-    return np.where(np.equal(array1,array2))
-
-# %%
-#Készíts egy olyan függvényt, ami vissza adja a megadott array dimenzióit:
-# Be: [[1,2,3], [4,5,6]]
-# Ki: "sor: 2, oszlop: 3, melyseg: 1"
-# get_array_shape()
-# 3D-vel még műküdnie kell!
+'''
+FONTOS: Az első feladatáltal visszaadott DataFrame-et kell használni a további feladatokhoz. 
+A függvényeken belül mindig készíts egy másolatot a bemenő df-ről, (new_df = df.copy() és ezzel dolgozz tovább.)
+'''
 
 # %%
 
-def get_array_shape(arr: np.array) -> str:
-    return 'sor: {0}, oszlop: {1}, melyseg: {2}'.format(*arr.shape + (0,0,0))
 
 # %%
-# Készíts egy olyan függvényt, aminek segítségével elő tudod állítani egy neurális hálózat tanításához szükséges Y-okat egy numpy array-ből. 
-#Bementként add meg az array-t, illetve hogy mennyi class-od van. Kimenetként pedig adjon vissza egy 2d array-t, ahol a sorok az egyes elemek. Minden nullákkal teli legyen és csak ott álljon egyes, ahol a bementi tömb megjelöli
-# Be: [1, 2, 0, 3], 4
-# Ki: [[0,1,0,0], [0, 0, 1, 0], [1, 0, 0, 0], [0, 0, 0, 1]]
-# encode_Y()
+'''
+Készíts egy függvényt, ami egy string útvonalat vár paraméterként, és egy DataFrame ad visszatérési értékként.
+
+Egy példa a bemenetre: 'test_data.csv'
+Egy példa a kimenetre: df_data
+return type: pandas.core.frame.DataFrame
+függvény neve: csv_to_df
+'''
 
 # %%
-def encode_Y(input_array, num_classes):
-    return np.eye(num_classes)[input_array]
+def csv_to_df(input):
+    df_data=pd.read_csv(input)
+    return df_data
 
-# %%
-# A fenti feladatnak valósítsd meg a kiértékelését. Adj meg a 2d array-t és adj vissza a decodolt változatát
-# Be:  [[0,1,0,0], [0, 0, 1, 0], [1, 0, 0, 0], [0, 0, 0, 1]]
-# Ki:  [1, 2, 0, 3]
-# decode_Y()
 
-# %%
-def decode_Y(input):
-    return np.argmax(input, axis=1)
-
-# %%
-# Készíts egy olyan függvényt, ami képes kiértékelni egy neurális háló eredményét! Bemenetként egy listát és egy array-t és adja vissza a legvalószínübb element a listából.
-# Be: ['alma', 'körte', 'szilva'], [0.2, 0.2, 0.6]. 
-# Ki: 'szilva'
-# eval_classification()
-
-# %%
-def eval_classification(array1,array2):
-    return array1[np.argmax(array2)]
-
-# %%
-# Készíts egy olyan függvényt, ahol az 1D array-ben a páratlan számokat -1-re cseréli
-# Be: [1,2,3,4,5,6]
-# Ki: [-1,2,-1,4,-1,6]
-# repalce_odd_numbers()
-
-# %%
-def replace_odd_numbers(array:np.array):
-    array[array%2 == 1] = -1 
-    return array
-
-# %%
-# Készíts egy olyan függvényt, ami egy array értékeit -1 és 1-re változtatja, attól függően, hogy az adott elem nagyobb vagy kisebb a paraméterként megadott számnál.
-# Ha a szám kisebb mint a megadott érték, akkor -1, ha nagyobb vagy egyenlő, akkor pedig 1.
-# Be: [1, 2, 5, 0], 2
-# Ki: [-1, 1, 1, -1]
-# replace_by_value()
-
-# %%
-def replace_by_value(array:np.array,num):
-    array[array < num] = -1 
-    array[array >= num] = 1 
-    return array
-
-# %%
-# Készítsd egy olyan függvényt, ami az array értékeit összeszorozza és az eredmény visszaadja
-# Be: [1,2,3,4]
-# Ki: 24
-# array_multi()
-# Ha több dimenziós a tömb, akkor az egész tömb elemeinek szorzatával térjen vissza
-
-# %%
-
-def array_multi(arr):
-    return np.prod(arr)
 
 
 # %%
-# Készítsd egy olyan függvényt, ami a 2D array értékeit összeszorozza és egy olyan array-el tér vissza, aminek az elemei a soroknak a szorzata
-# Be: [[1, 2], [3, 4]]
-# Ki: [2, 12]
-# array_multi_2d()
+'''
+Készíts egy függvényt, ami egy DataFrame-et vár paraméterként, 
+és átalakítja azoknak az oszlopoknak a nevét nagybetűsre amelyiknek neve nem tartalmaz 'e' betüt.
+
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: df_data_capitalized
+return type: pandas.core.frame.DataFrame
+függvény neve: capitalize_columns
+'''
 
 # %%
 
-def array_multi_2d(array):
+def capitalize_columns(df):
+
+    new_df=df.copy()
+    new_columns = []
+    for col in new_df.columns:
+        if 'e' not in col:
+            new_columns.append(col.upper())
+        else:
+            new_columns.append(col)
+    new_df.columns = new_columns
+    return new_df
+
+
     
-    final = np.prod(array, axis=1)
-    return final.tolist()
-
 
 # %%
-# Készíts egy olyan függvényt, amit egy meglévő numpy array-hez készít egy bordert nullásokkal. Bementként egy array-t várjon és kimenetként egy array jelenjen meg aminek van border-je
-# Be: [[1,2],[3,4]]
-# Ki: [[0,0,0,0],[0,1,2,0],[0,3,4,0],[0,0,0,0]]
-# add_border()
+'''
+Készíts egy függvényt, ahol egy szám formájában vissza adjuk, hogy hány darab diáknak sikerült teljesíteni a matek vizsgát.
+(legyen az átmenő ponthatár 50).
 
-
-# %%
-
-def add_border(array):
-    return np.pad(array, pad_width=1, mode='constant')
-
-
-# %%
-# Készíts egy olyan függvényt ami két dátum között felsorolja az összes napot.
-# Be: '2023-03', '2023-04'
-# Ki: ['2023-03-01', '2023-03-02', .. , '2023-03-31',]
-# list_days()
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: 5
+return type: int
+függvény neve: math_passed_count
+'''
 
 # %%
 
-def list_days(start: str, end: str) -> np.array:
-    return np.arange(np.datetime64(start), np.datetime64(end), np.timedelta64(1, 'D'))
+def math_passed_count(df):
+    return len(df[df['math score'] >= 50])
 
-# %%
-# Írj egy fügvényt ami vissza adja az aktuális dátumot az alábbi formában: YYYY-MM-DD
-# Be:
-# Ki: 2017-03-24 
-
-# %%
-
-
-def get_act_date() -> np.datetime64:
-    return np.datetime64('today')
 
 
 
 # %%
-# Írj egy olyan függvényt ami visszadja, hogy mennyi másodperc telt el 1970 január 01. 00:00:00 óta.
-# Be: 
-# Ki: másodpercben az idó, int-é kasztolva
-# sec_from_1970()
+'''
+Készíts egy függvényt, ahol Dataframe ként vissza adjuk azoknak a diákoknak az adatait (sorokat), akik végeztek előzetes gyakorló kurzust.
 
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: df_did_pre_course
+return type: pandas.core.frame.DataFrame
+függvény neve: did_pre_course
+'''
 
 # %%
 
-def sec_from_1970():
-    return int((np.datetime64('now') - np.datetime64('1970-01-01T00:02:00Z')) / np.timedelta64(1, 's'))
+def did_pre_course(df):
+    new_df=df.copy()
+    return new_df[new_df['test preparation course'] == 'completed']
 
+
+# %%
+'''
+Készíts egy függvényt, ahol a bemeneti Dataframet a diákok szülei végzettségi szintjei alapján csoportosításra kerül,
+majd aggregációként vegyük, hogy átlagosan milyen pontszámot értek el a diákok a vizsgákon.
+
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: df_average_scores
+return type: pandas.core.frame.DataFrame
+függvény neve: average_scores
+'''
+
+# %%
+
+def average_scores(df):
+    new_df=df.copy()
+    return new_df.groupby('parental level of education', as_index=False).agg({'math score': 'mean', 'reading score': 'mean', 'writing score': 'mean'})
+
+
+
+# %%
+'''
+Készíts egy függvényt, ami a bementeti Dataframet kiegészíti egy 'age' oszloppal, töltsük fel random 18-66 év közötti értékekkel.
+A random.randint() függvényt használd, a random sorsolás legyen seedleve, ennek értéke legyen 42.
+
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: df_data_with_age
+return type: pandas.core.frame.DataFrame
+függvény neve: add_age
+'''
+
+# %%
+
+def add_age(df):
+    random.seed(42)
+    ages = [random.randint(18, 66) for _ in range(len(df))]
+    df_with_age = df.copy()
+    df_with_age['age'] = ages
+    return df_with_age
+
+
+# %%
+'''
+Készíts egy függvényt, ami vissza adja a legjobb teljesítményt elérő női diák pontszámait.
+
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: (99,99,99) #math score, reading score, writing score
+return type: tuple
+függvény neve: female_top_score
+'''
+
+# %%
+def female_top_score(df):
+    female_df = df[df['gender'] == 'female'] 
+    female_top_score = tuple(female_df[['math score', 'reading score', 'writing score']].max())
+    return female_top_score
+
+
+# %%
+'''
+Készíts egy függvényt, ami a bementeti Dataframet kiegészíti egy 'grade' oszloppal. 
+Számoljuk ki hogy a diákok hány százalékot ((math+reading+writing)/300) értek el a vizsgán, és osztályozzuk őket az alábbi szempontok szerint:
+
+90-100%: A
+80-90%: B
+70-80%: C
+60-70%: D
+<60%: F
+
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: df_data_with_grade
+return type: pandas.core.frame.DataFrame
+függvény neve: add_grade
+'''
+
+# %%
+
+def add_grade(df):
+    new_df=df.copy()
+    new_df['grade'] = pd.cut((new_df['math score'] + new_df['reading score'] + new_df['writing score'])/300,
+                         bins=[0, 0.6, 0.7, 0.8, 0.9, 1],
+                         labels=['F', 'D', 'C', 'B', 'A'])
+    return new_df
+
+
+
+
+# %%
+'''
+Készíts egy függvényt, ami a bemeneti Dataframe adatai alapján elkészít egy olyan oszlop diagrammot,
+ami vizualizálja a nemek által elért átlagos matek pontszámot.
+
+Oszlopdiagram címe legyen: 'Average Math Score by Gender'
+Az x tengely címe legyen: 'Gender'
+Az y tengely címe legyen: 'Math Score'
+
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: fig
+return type: matplotlib.figure.Figure
+függvény neve: math_bar_plot
+'''
+
+# %%
+
+def math_bar_plot(df):
+    gender_scores = df.groupby('gender')['math score'].mean()
+    fig, ax = plt.subplots()
+    ax.bar(gender_scores.index, gender_scores.values)
+    ax.set_title('Average Math Score by Gender')
+    ax.set_xlabel('Gender')
+    ax.set_ylabel('Math Score')
+    plt.show()
+    return fig
+
+
+
+
+# %%
+''' 
+Készíts egy függvényt, ami a bemeneti Dataframe adatai alapján elkészít egy olyan histogramot,
+ami vizualizálja az elért írásbeli pontszámokat.
+
+A histogram címe legyen: 'Distribution of Writing Scores'
+Az x tengely címe legyen: 'Writing Score'
+Az y tengely címe legyen: 'Number of Students'
+
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: fig
+return type: matplotlib.figure.Figure
+függvény neve: writing_hist
+'''
+
+# %%
+
+def writing_hist(df):
+    fig, ax = plt.subplots()
+    ax.hist(df['writing score'], bins=10)
+    ax.set_title('Distribution of Writing Scores')
+    ax.set_xlabel('Writing Score')
+    ax.set_ylabel('Number of Students')
+    return fig
+
+
+
+# %%
+''' 
+Készíts egy függvényt, ami a bemeneti Dataframe adatai alapján elkészít egy olyan kördiagramot,
+ami vizualizálja a diákok etnikum csoportok szerinti eloszlását százalékosan.
+
+Érdemes megszámolni a diákok számát, etnikum csoportonként,majd a százalékos kirajzolást az autopct='%1.1f%%' paraméterrel megadható.
+Mindegyik kör szelethez tartozzon egy címke, ami a csoport nevét tartalmazza.
+A diagram címe legyen: 'Proportion of Students by Race/Ethnicity'
+
+Egy példa a bemenetre: df_data
+Egy példa a kimenetre: fig
+return type: matplotlib.figure.Figure
+függvény neve: ethnicity_pie_chart
+'''
+
+# %%
+
+def ethnicity_pie_chart(df):
+    
+    counts = df['race/ethnicity'].value_counts()
+    
+  
+    percentages = [count/len(df)*100 for count in counts]
+    
+   
+    labels = counts.index.tolist()
+    
+   
+    fig, ax = plt.subplots()
+    ax.pie(percentages, labels=labels, autopct='%1.1f%%')
+    ax.set_title('Proportion of Students by Race/Ethnicity')
+    
+    return fig
 
 
