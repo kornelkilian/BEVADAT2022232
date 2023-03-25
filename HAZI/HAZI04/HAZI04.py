@@ -30,6 +30,7 @@ def csv_to_df(input):
 
 
 
+
 # %%
 '''
 Készíts egy függvényt, ami egy DataFrame-et vár paraméterként, 
@@ -109,9 +110,10 @@ függvény neve: average_scores
 
 def average_scores(df):
     new_df=df.copy()
-    return new_df.groupby('parental level of education', as_index=False).agg({'math score': 'mean', 'reading score': 'mean', 'writing score': 'mean'})
+    df_average_scores = new_df.groupby('parental level of education').mean()[['math score', 'reading score', 'writing score']]
+    return df_average_scores
 
-
+print(average_scores(test))
 
 # %%
 '''
@@ -130,7 +132,6 @@ def add_age(df):
     new_df=df.copy
     random.seed(42)
     new_df['age'] = [random.randint(18, 66) for _ in range(len(new_df))]
-    
     return new_df
 
 
@@ -172,9 +173,18 @@ függvény neve: add_grade
 
 def add_grade(df):
     new_df=df.copy()
-    new_df['grade'] = pd.cut((new_df['math score'] + new_df['reading score'] + new_df['writing score'])/3,
-                         bins=[0, 0.6, 0.7, 0.8, 0.9, 1],
-                         labels=['F', 'D', 'C', 'B', 'A'])
+    new_df['percent'] = (new_df['math score'] + new_df['reading score'] + new_df['writing score']) / 300
+    conditions = [
+        new_df['percent'] < 0.6,
+        new_df['percent'] < 0.7,
+        new_df['percent'] < 0.8,
+        new_df['percent'] < 0.9,
+        new_df['percent'] <= 1.0
+    ]
+    grades = ['F', 'D', 'C', 'B', 'A']
+    new_df['grade'] = pd.Series(np.select(conditions, grades))
+    new_df = new_df.drop('percent', axis=1)
+    
     return new_df
 
 
@@ -202,7 +212,6 @@ def math_bar_plot(df):
     ax.set_title('Average Math Score by Gender')
     ax.set_xlabel('Gender')
     ax.set_ylabel('Math Score')
-    plt.show()
     return fig
 
 
@@ -252,19 +261,15 @@ függvény neve: ethnicity_pie_chart
 def ethnicity_pie_chart(df):
     
     counts = df['race/ethnicity'].value_counts()
-    
-  
+
     percentages = [count/len(df)*100 for count in counts]
-    
-   
     labels = counts.index.tolist()
-    
-   
     fig, ax = plt.subplots()
     ax.pie(percentages, labels=labels, autopct='%1.1f%%')
     ax.set_title('Proportion of Students by Race/Ethnicity')
     
     return fig
+
 
 
 
