@@ -117,8 +117,6 @@ def plot_population(df):
     ax.set_xlabel('Country')
     ax.set_ylabel('Population (millions)')
     ax.bar(df['country'], df['population'] )
-    plt.xticks(rotation=90)
-
     return fig
 
 
