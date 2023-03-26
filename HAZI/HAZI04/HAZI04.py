@@ -113,7 +113,6 @@ def average_scores(df):
     df_average_scores = new_df.groupby('parental level of education').mean()[['math score', 'reading score', 'writing score']]
     return df_average_scores
 
-print(average_scores(test))
 
 # %%
 '''
