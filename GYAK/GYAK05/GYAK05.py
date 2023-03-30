@@ -9,8 +9,8 @@ class KNNClassifier:
         self.k = k
         self.test_split_ratio = test_split_ratio
         
-
-    def load_csv(self, csv_path: str) -> Tuple[np.ndarray, np.ndarray]:
+    @staticmethod
+    def  load_csv(self, csv_path: str) -> Tuple[np.ndarray, np.ndarray]:
         np.random.seed(42)
         dataset = np.genfromtxt(csv_path, delimiter=',')
         np.random.shuffle(dataset)
