@@ -1,0 +1,19 @@
+1: 
+Betöltjuk a kapott csv fájlt egy Datasetbe, majd features és class oszlopok alapján felbontjuk. Itt végeznénk adattisztítást is, de most ezt nem kérte a feladat.
+
+2:
+Adatok felbontása training és teszt halmazra, fontosak az arányok.
+
+3:
+eucliden függvénnyel megnézzük az aktuális sor távolságát minden training adathoz képest.
+Megkeressük melyikhez van a legközelebb
+
+4
+A predict függvénynél minden sorra meghívjuk az euclediean függvényt
+majd növekvő sorrendbe rendezzük és vesszük K legközelebbi móduszát
+
+5.
+Megállapítjuk hány százalékban egyeznek a jósolt kimeneteleink.
+
+6
+best_k függvény 1-20 as K értéken végigfuttatja a predikciót, majd kiválasztja melyikkel érte el a legjobb értéket.
