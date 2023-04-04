@@ -1,4 +1,6 @@
 import pandas as pd
+from datetime import datetime
+
 
 class NJCleaner:
     
@@ -19,11 +21,25 @@ class NJCleaner:
         self.data.drop(columns='date', axis=1, inplace=True)
         return self.data
     
+
     def convert_scheduled_time_to_part_of_the_day(self):
-        bins = pd.IntervalIndex.from_tuples([(0, 3.59), (4, 7.59), (8, 11.59), (12, 15.59), (16, 19.59), (20, 23.59)])
-        labels = ['late_night', 'early_morning', 'morning', 'afternoon', 'evening', 'night']
-        self.data['part_of_the_day'] = pd.cut(pd.to_datetime(self.data['scheduled_time']).dt.hour, bins=bins, labels=labels)
-        self.data.drop(['scheduled_time'], axis=1, inplace=True)
+        def get_part_of_day(hour):
+            if 4 <= hour < 8:
+                return 'early_morning'
+            elif 8 <= hour < 12:
+                return 'morning'
+            elif 12 <= hour < 16:
+                return 'afternoon'
+            elif 16 <= hour < 20:
+                return 'evening'
+            elif 20 <= hour <= 23:
+                return 'night'
+            else:
+                return 'late_night'
+
+        self.data['scheduled_time'] = self.data['scheduled_time'].apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S').time())
+        self.data['part_of_the_day'] = self.data['scheduled_time'].apply(lambda x: get_part_of_day(x.hour))
+        self.data.drop('scheduled_time', axis=1, inplace=True)
         return self.data
     
     def convert_delay(self):
@@ -34,7 +50,7 @@ class NJCleaner:
         self.data.drop(columns=['train_id', 'actual_time', 'delay_minutes'], axis=1, inplace=True)
         return self.data
     
-    def save_first_60k(self, path):
+    def save_first_60k(self, path='data/NJ.csv'):
         self.data.iloc[:60000].to_csv(path, index=False)
     
     def prep_df(self):
@@ -44,5 +60,6 @@ class NJCleaner:
         self.convert_scheduled_time_to_part_of_the_day()
         self.convert_delay()
         self.drop_unnecessary_columns()
+        self.save_first_60k()
         return self.data
 
