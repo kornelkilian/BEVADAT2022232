@@ -9,10 +9,6 @@ class KNNClassifier:
         self.k = k
         self.test_split_ratio = test_split_ratio
 
-    @property
-    def k_neighbors(self) -> int:
-        return self.k
-
     @staticmethod
     def load_csv(csv_path:str) ->Tuple[pd.DataFrame, pd.DataFrame]:
         dataset = pd.read_csv(csv_path, delimiter=',')
@@ -23,7 +19,6 @@ class KNNClassifier:
     def train_test_split(self, features:pd.DataFrame, labels:pd.DataFrame) -> None:
         test_size = int(features.shape[0] * self.test_split_ratio)
         train_size = features.shape[0] - test_size
-
         assert features.shape[0] == test_size + train_size, "Size mismatch!"
 
         self.x_train, self.y_train = features.iloc[:train_size,:],labels[:train_size]
@@ -39,14 +34,11 @@ class KNNClassifier:
     def predict(self, x_test:pd.DataFrame) -> None:
         labels_pred = []
         for x_test_element in x_test.itertuples(index=False):
-        
             row = pd.DataFrame(x_test_element).transpose()
             row.columns = x_test_element._fields
-
             distances = self.euclidean(row)
             distances = pd.concat([distances, self.y_train], axis=1)
             distances.sort_values(by='distance', axis=0, inplace=True)
-
             label_pred = distances.iloc[:self.k, -1].mode()[0]
             labels_pred.append(label_pred)
         self.y_preds = pd.DataFrame(labels_pred, columns=['Outcome'])
@@ -54,7 +46,6 @@ class KNNClassifier:
     def accuracy(self) -> float:
         y_test_local = self.y_test.copy()
         y_test_local.reset_index(drop=True, inplace=True)
-
         true_positive = (y_test_local['Outcome'] == self.y_preds['Outcome']).sum()
         return true_positive / y_test_local.shape[0] * 100
     
@@ -72,3 +63,8 @@ class KNNClassifier:
 
     def confusion_matrix(self):
         return confusion_matrix(self.y_test, self.y_preds)
+
+    @property
+    def k_neighbors(self) -> int:
+        return self.k
+
