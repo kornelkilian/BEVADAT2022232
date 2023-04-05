@@ -10,11 +10,15 @@ class KNNClassifier:
         self.test_split_ratio = test_split_ratio
 
     @staticmethod
-    def load_csv(csv_path:str) ->Tuple[pd.DataFrame, pd.DataFrame]:
-        dataset = pd.read_csv(csv_path, delimiter=',')
-        dataset = dataset.sample(frac=1, random_state=42).reset_index(drop=True)
-        x,y = pd.DataFrame(dataset.iloc[:,:8]), pd.DataFrame(dataset.iloc[:,-1])
-        return x, y
+    def load_csv(self, csv_path: str):
+            dataset = pd.read_csv(csv_path, delimiter=',')
+            dataset = dataset.sample(frac=1, random_state=42).reset_index(drop=True)
+            x, y = dataset.iloc[:, :4], dataset.iloc[:, -1]
+            x = x.fillna(3.5)
+            x = x[(x <= 13.0) & (x >= 0.0)]
+            y = y.iloc[x.index]
+            x_train, x_test, y_train, y_test = self.train_test_split(x, y)
+            return x_train, y_train, x_test, y_test
     
     def train_test_split(self, features: pd.DataFrame, labels: pd.DataFrame) -> None:
         test_size = int(len(features) * self.test_split_ratio)
@@ -23,21 +27,19 @@ class KNNClassifier:
         self.x_train, self.y_train = features[:train_size], labels[:train_size]
         self.x_test, self.y_test = features[train_size:train_size + test_size], labels[train_size:train_size + test_size]
 
-    def euclidean(self, element_of_x:pd.DataFrame) -> pd.DataFrame:
-        points = self.x_train.reset_index(drop=True)
-        element_of_x = element_of_x.reindex(points.index).ffill()
-        distances = ((points - element_of_x) ** 2).sum(axis=1) ** 0.5
-        return pd.DataFrame(distances, columns=['distance'])
+    def euclidean(self, element_of_x: pd.DataFrame) -> pd.DataFrame:
+        distances = ((self.x_train - element_of_x) ** 2).sum(axis=1).pow(0.5)
+        return pd.DataFrame({'distance': distances})
     
     def predict(self, x_test: pd.DataFrame) -> None:
         labels_pred = []
         for i, x_test_element in x_test.iterrows():
             distances = self.euclidean(x_test_element)
-            distances = pd.concat([distances, self.y_train], axis=1)
-            distances = distances.sort_values(by=0, axis=0).iloc[:self.k, 1]
-            label_pred = mode(distances, axis=None).mode[0]
+            distances = pd.DataFrame({'distance': distances, 'label': self.y_train})
+            distances = distances.sort_values(by='distance')
+            label_pred = distances.head(self.k)['label'].mode().values[0]
             labels_pred.append(label_pred)
-        self.y_preds = pd.Series(labels_pred, dtype=pd.np.int32)
+        self.y_preds = pd.Series(labels_pred, dtype='int32')
 
     def accuracy(self) -> float:
         true_positive = (self.y_test == self.y_preds).sum()
