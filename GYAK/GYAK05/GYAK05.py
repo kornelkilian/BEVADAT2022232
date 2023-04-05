@@ -10,16 +10,12 @@ class KNNClassifier:
         self.test_split_ratio = test_split_ratio
         
     @staticmethod
-    def  load_csv(self, csv_path: str) -> Tuple[np.ndarray, np.ndarray]:
+    def load_csv(csv_path:str) ->Tuple[np.ndarray,np.ndarray]:
         np.random.seed(42)
-        dataset = np.genfromtxt(csv_path, delimiter=',')
-        np.random.shuffle(dataset)
-        x, y = dataset[:, :4], dataset[:, -1]
-        x[np.isnan(x)] = 3.5
-        x = np.delete(x, np.where(np.logical_or(x > 13.0, x < 0.0))[0], axis=0)
-        y = np.delete(y, np.where(np.logical_or(x > 13.0, x < 0.0))[0], axis=0)
-        x_train, y_train, x_test, y_test = self.train_test_split(self.x, self.y)
-        return x_train, y_train, x_test, y_test
+        dataset = np.genfromtxt(csv_path,delimiter=',')
+        np.random.shuffle(dataset,)
+        x,y = dataset[:,:4],dataset[:,-1]
+        return x,y
 
     def train_test_split(self, features: np.ndarray, labels: np.ndarray) -> None:
         test_size = int(len(features) * self.test_split_ratio)
