@@ -62,7 +62,7 @@ from src.NJCleaner import NJCleaner
 cleaner=NJCleaner('2018_03.csv')
 
 cleaner.prep_df()
-cleaner.data
+
 
 
 
@@ -83,6 +83,6 @@ classifier.fit(X_train, Y_train)
 
 Y_pred = classifier.predict(X_test)
 
-print(accuracy_score(Y_test, Y_pred))
+#print(accuracy_score(Y_test, Y_pred))
 
 
