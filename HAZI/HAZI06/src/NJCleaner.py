@@ -53,13 +53,13 @@ class NJCleaner:
     def save_first_60k(self, path='data/NJ.csv'):
         self.data.iloc[:60000].to_csv(path, index=False)
     
-    def prep_df(self):
+    def prep_df(self,path:str = 'data/NJ.csv'):
         self.order_by_scheduled_time()
         self.drop_columns_and_nan()
         self.convert_date_to_day()
         self.convert_scheduled_time_to_part_of_the_day()
         self.convert_delay()
         self.drop_unnecessary_columns()
-        self.save_first_60k()
-        return self.data
+        self.save_first_60k(path)
+        
 
