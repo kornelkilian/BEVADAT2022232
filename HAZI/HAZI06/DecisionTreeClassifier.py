@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.Node import Node
+from Node import Node
 
 class DecisionTreeClassifier():
     def __init__(self, min_samples_split=2, max_depth=2):

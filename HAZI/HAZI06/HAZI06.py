@@ -55,8 +55,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-from src.DecisionTreeClassifier import DecisionTreeClassifier
-from src.NJCleaner import NJCleaner
+from DecisionTreeClassifier import DecisionTreeClassifier
+from NJCleaner import NJCleaner
 
 # %%
 cleaner=NJCleaner('2018_03.csv')
