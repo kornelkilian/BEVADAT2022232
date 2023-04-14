@@ -39,7 +39,6 @@ class NJCleaner:
 
         self.data['scheduled_time'] = self.data['scheduled_time'].apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S').time())
         self.data['part_of_the_day'] = self.data['scheduled_time'].apply(lambda x: get_part_of_day(x.hour))
-        self.data.drop('scheduled_time', axis=1, inplace=True)
         return self.data
     
     def convert_delay(self):
