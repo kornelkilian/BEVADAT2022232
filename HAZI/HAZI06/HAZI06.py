@@ -49,6 +49,10 @@ Ha ezt feladatot hiányzik, akkor nem fogadjuk el a házit!
 # 
 
 # %%
+# %% [markdown]
+# 
+
+# %%
 import numpy as np
 import pandas as pd
 
@@ -60,17 +64,9 @@ from NJCleaner import NJCleaner
 
 # %%
 cleaner=NJCleaner('2018_03.csv')
-
 cleaner.prep_df()
-
-
-
-
-# %%
-cleaner=NJCleaner('2018_03.csv')
-
 col_name = ['day','stop_sequence','from_id','to_id','part_of_the_day','delay','status','line','type']
-data = pd.read_csv('/Users/kornel/Documents/GitHub/BEVADAT2022232/HAZI/HAZI06/data/NJ.csv', skiprows=1, header=None, names=col_name)
+data = pd.read_csv('data/NJ.csv', skiprows=1, header=None, names=col_name)
 
 X = data.iloc[:, :-1].values
 Y = data.iloc[:, -1].values.reshape(-1, 1)
@@ -78,11 +74,22 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=.2, random_s
 
 # %%
 
-classifier = DecisionTreeClassifier(min_samples_split=1, max_depth=4)
+classifier = DecisionTreeClassifier(min_samples_split=3, max_depth=4)
 classifier.fit(X_train, Y_train)
 
 Y_pred = classifier.predict(X_test)
 
-#print(accuracy_score(Y_test, Y_pred))
+print(accuracy_score(Y_test, Y_pred))
 
+"""
+Az NJCleaner megoldásában volt egy kis problémám, valamiért nem dobódtak el az oszlopok, csak helyben. Azomban teljes system restart megoldotta.
+Volt hogy kifagyott, mert túl nagy értéket állítottam a classifierben, meg azért egy ideig eltartott minden futás, de különösebb probléma nem volt vele.
+
+Elért eredmény: 0.7865833333333333 (min_samples_split=3, max_depth=4)
+                0.7890833333333334 (10,6)
+                0.7890833333333334 (5,6)
+                0.7891666666666667 (3,6)
+                0.79325             (2,7)
+                0.7998333333333333  (2,9)
+"""
 
