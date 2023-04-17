@@ -22,24 +22,15 @@ class NJCleaner:
         return self.data
     
 
-    def convert_scheduled_time_to_part_of_the_day(self):
-        def get_part_of_day(hour):
-            if 4 <= hour < 8:
-                return 'early_morning'
-            elif 8 <= hour < 12:
-                return 'morning'
-            elif 12 <= hour < 16:
-                return 'afternoon'
-            elif 16 <= hour < 20:
-                return 'evening'
-            elif 20 <= hour <= 23:
-                return 'night'
-            else:
-                return 'late_night'
+    def convert_scheduled_time_to_part_of_the_day(self) -> pd.DataFrame:
+        df = self.data.copy()
 
-        self.data['scheduled_time'] = self.data['scheduled_time'].apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S').time())
-        self.data['part_of_the_day'] = self.data['scheduled_time'].apply(lambda x: get_part_of_day(x.hour))
-        return self.data
+        times = [0, 4, 8, 12, 16, 20, 24]
+        labels = ['late_night', 'early_morning', 'morning', 'afternoon', 'evening', 'night']
+
+        df['part_of_the_day'] = pd.cut(pd.to_datetime(df['scheduled_time']).dt.hour, bins=times, labels=labels, include_lowest=True)
+        df.drop(columns=['scheduled_time'], inplace=True)
+        return df
     
     def convert_delay(self):
         self.data['delay'] = self.data['delay_minutes'].apply(lambda x: 0 if x < 5 else 1)
