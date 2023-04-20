@@ -17,11 +17,11 @@ class LinearRegression:
     
         self.X = self.df['petal width (cm)'].values
         self.y = self.df['sepal length (cm)'].values
-        
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2, random_state=42)
+
         
 
     def fit(self, X: np.array, y: np.array):
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
         # Building the model
         self.m = 0
@@ -51,6 +51,4 @@ class LinearRegression:
     def predict(self, X):
         y_pred = self.m*self.X_test + self.c
 
-        plt.scatter(self.X_test, self.y_test)
-        plt.plot([min(self.X_test), max(self.X_test)], [min(y_pred), max(y_pred)], color='red') # predicted
-        plt.show()
+        return y_pred
