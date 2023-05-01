@@ -27,8 +27,8 @@ class KMeansOnDigits:
             mask = (self.clusters == i)
             self.labels[mask] = mode(self.digits.target[mask])[0]
         
-    def calc_accuracy(self):
-        self.accuracy = accuracy_score(self.labels, self.clusters)
+    def calc_accuracy(target_labels: np.ndarray, predicted_labels: np.ndarray) -> float:
+        return round(accuracy_score(target_labels, predicted_labels), 2)
         
     def confusion_matrix(self):
         self.mat = confusion_matrix(self.labels, self.clusters)
