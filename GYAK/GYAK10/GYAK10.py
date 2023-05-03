@@ -23,7 +23,6 @@ class Dense:
         self.initialize()
 
     def initialize(self):
-        # Initialize the weights
         np.random.seed(42)
         self.W = np.random.normal(0.0, 1, (self.n_input, self.n_output))
         self.bias = np.random.random(size=(self.n_output))
